@@ -1,0 +1,24 @@
+<?php
+
+declare(strict_types=1);
+
+use Anamorphic\Framework\Database\Migration;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        $this->raw(
+            "CREATE TABLE IF NOT EXISTS `{{ table }}` (
+                `id` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4"
+        );
+    }
+
+    public function down(): void
+    {
+        $this->raw("DROP TABLE IF EXISTS `{{ table }}`");
+    }
+};

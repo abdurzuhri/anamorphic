@@ -1,0 +1,20 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Models;
+
+use Anamorphic\Framework\Database\Model;
+
+class {{ class }} extends Model
+{
+    protected string $table = '{{ table }}';
+
+    protected array $fillable = [
+        //
+    ];
+
+    protected array $hidden = [
+        //
+    ];
+}

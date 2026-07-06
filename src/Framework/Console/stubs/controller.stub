@@ -1,0 +1,49 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Http\Controllers;
+
+use Anamorphic\Framework\Http\Request;
+use Anamorphic\Framework\Http\Response;
+
+class {{ class }} extends Controller
+{
+    public function index(Request $request): Response
+    {
+        return Response::json([
+            'message' => '{{ class }}@index',
+        ]);
+    }
+
+    public function store(Request $request): Response
+    {
+        return Response::json([
+            'message' => '{{ class }}@store',
+        ], 201);
+    }
+
+    public function show(Request $request, string $id): Response
+    {
+        return Response::json([
+            'message' => '{{ class }}@show',
+            'id' => $id,
+        ]);
+    }
+
+    public function update(Request $request, string $id): Response
+    {
+        return Response::json([
+            'message' => '{{ class }}@update',
+            'id' => $id,
+        ]);
+    }
+
+    public function destroy(Request $request, string $id): Response
+    {
+        return Response::json([
+            'message' => '{{ class }}@destroy',
+            'id' => $id,
+        ]);
+    }
+}

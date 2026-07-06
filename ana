@@ -1,0 +1,21 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+/**
+ * Anamorphic console entry point.
+ *
+ * Usage examples:
+ *   php ana hallo
+ *   php ana move --gen
+ *   php ana make:controller GuestController
+ *   php ana make:model Guest
+ *   php ana make:migration create_guests_table
+ *   php ana list
+ */
+
+/** @var \Anamorphic\Framework\Application $app */
+$app = require __DIR__ . '/bootstrap/app.php';
+
+exit($app->handleConsole($argv));

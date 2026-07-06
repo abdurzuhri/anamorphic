@@ -1,0 +1,47 @@
+{
+    "name": "abdurzuhri/anamorphic",
+    "description": "Anamorphic - a minimalist PHP framework for building things fast, without the ceremony.",
+    "type": "project",
+    "license": "MIT",
+    "keywords": ["php", "framework", "anamorphic", "minimalist", "micro-framework"],
+    "authors": [
+        {
+            "name": "Abdurrahman Zuhri",
+            "homepage": "https://github.com/abdurzuhri"
+        }
+    ],
+    "require": {
+        "php": "^8.2",
+        "ext-pdo": "*",
+        "ext-mbstring": "*",
+        "vlucas/phpdotenv": "^5.6"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^11.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Anamorphic\\Framework\\": "src/Framework/",
+            "App\\": "app/"
+        },
+        "files": [
+            "src/Framework/Support/helpers.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "post-root-package-install": [
+            "php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+        ]
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "sort-packages": true
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
