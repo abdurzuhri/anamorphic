@@ -22,15 +22,17 @@ class ServeCommand extends Command
         $host = $options['host'] ?? '127.0.0.1';
         $port = $options['port'] ?? '8000';
         $docroot = $this->app->publicPath();
+        $router = $this->app->publicPath('index.php');
 
         $this->info("Anamorphic development server started: http://{$host}:{$port}");
         $this->line('Press Ctrl+C to stop the server.');
         $this->line('');
 
         passthru(sprintf(
-            'php -S %s -t %s',
+            'php -S %s -t %s %s',
             escapeshellarg("{$host}:{$port}"),
-            escapeshellarg($docroot)
+            escapeshellarg($docroot),
+            escapeshellarg($router)
         ));
 
         return 0;
