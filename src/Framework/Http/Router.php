@@ -135,22 +135,27 @@ class Router
 
     protected function callAction(mixed $action, Request $request, array $params): Response
     {
+        // Route params are associative (keyed by placeholder name, e.g. "id").
+        // Spread them positionally rather than as named arguments, so the
+        // placeholder name never has to match the controller's parameter name.
+        $positional = array_values($params);
+
         if ($action instanceof Closure) {
-            return $action($request, ...$params);
+            return $action($request, ...$positional);
         }
 
         if (is_array($action)) {
             [$class, $method] = $action;
             $controller = $this->container->make($class);
 
-            return $controller->{$method}($request, ...$params);
+            return $controller->{$method}($request, ...$positional);
         }
 
         if (is_string($action) && str_contains($action, '@')) {
             [$class, $method] = explode('@', $action, 2);
             $controller = $this->container->make($class);
 
-            return $controller->{$method}($request, ...$params);
+            return $controller->{$method}($request, ...$positional);
         }
 
         throw new \RuntimeException('Unresolvable route action.');

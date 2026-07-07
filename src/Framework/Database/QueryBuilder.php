@@ -26,7 +26,7 @@ class QueryBuilder
         return $this;
     }
 
-    public function where(string $column, string $operator, mixed $value = null): static
+    public function where(string $column, mixed $operator, mixed $value = null): static
     {
         if (func_num_args() === 2) {
             $value = $operator;

@@ -117,7 +117,7 @@ abstract class Model
         return $row ? new static($row) : null;
     }
 
-    public static function where(string $column, string $operator, mixed $value = null): QueryBuilder
+    public static function where(string $column, mixed $operator, mixed $value = null): QueryBuilder
     {
         return func_num_args() === 2
             ? static::query()->where($column, $operator)
