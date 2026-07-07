@@ -7,6 +7,10 @@ declare(strict_types=1);
  * (see .htaccess for Apache, or the "php ana hallo" dev server for local use).
  */
 
+// Buffer all output from here on so any stray warning/notice printed before
+// the real response can't corrupt it - Response::send() discards the buffer.
+ob_start();
+
 // When running under PHP's built-in dev server, let it serve real files
 // directly instead of routing them through the framework.
 if (PHP_SAPI === 'cli-server') {

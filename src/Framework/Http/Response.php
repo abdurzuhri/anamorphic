@@ -26,7 +26,14 @@ class Response
     {
         $headers['Content-Type'] = 'application/json; charset=utf-8';
 
-        return new static(json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE), $status, $headers);
+        $encoded = json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+
+        if ($encoded === false) {
+            $encoded = json_encode(['message' => 'Failed to encode JSON response: ' . json_last_error_msg()]);
+            $status = 500;
+        }
+
+        return new static($encoded, $status, $headers);
     }
 
     public static function html(string $html, int $status = 200): static
@@ -48,6 +55,10 @@ class Response
 
     public function send(): void
     {
+        while (ob_get_level() > 0) {
+            ob_end_clean();
+        }
+
         http_response_code($this->status);
 
         foreach ($this->headers as $key => $value) {

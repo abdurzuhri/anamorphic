@@ -24,9 +24,17 @@ abstract class Model
     /** @var array<string, mixed> */
     protected array $attributes = [];
 
+    /**
+     * Note: the constructor does a RAW attribute assignment (no $fillable
+     * filtering). This is what makes `new static($row)` correctly hydrate
+     * a model from a database row - including columns like "id", "created_at"
+     * that are intentionally NOT in $fillable. $fillable is only enforced by
+     * fill(), which is what you call explicitly when merging user-supplied
+     * input (e.g. `$model->fill($request->only([...])); $model->save();`).
+     */
     public function __construct(array $attributes = [])
     {
-        $this->fill($attributes);
+        $this->attributes = $attributes;
     }
 
     public function fill(array $attributes): static
@@ -53,6 +61,20 @@ abstract class Model
     public function toArray(): array
     {
         return array_diff_key($this->attributes, array_flip($this->hidden));
+    }
+
+    /**
+     * Raw attributes as they should be persisted to the database - unlike
+     * toArray(), this does NOT strip $hidden fields (e.g. "password").
+     * $hidden only controls what's safe to expose via the API, never what
+     * gets written to the database.
+     */
+    public function attributesForPersistence(): array
+    {
+        $data = $this->attributes;
+        unset($data[$this->primaryKey]);
+
+        return $data;
     }
 
     protected static function connection(): Connection
@@ -104,8 +126,8 @@ abstract class Model
 
     public static function create(array $attributes): static
     {
-        $model = new static($attributes);
-        $id = static::query()->insert($model->toArray());
+        $model = (new static())->fill($attributes);
+        $id = static::query()->insert($model->attributesForPersistence());
         $model->attributes[$model->primaryKey] = $id;
 
         return $model;
@@ -116,10 +138,10 @@ abstract class Model
         if (isset($this->attributes[$this->primaryKey])) {
             return static::query()
                 ->where($this->primaryKey, $this->attributes[$this->primaryKey])
-                ->update($this->toArray());
+                ->update($this->attributesForPersistence());
         }
 
-        $id = static::query()->insert($this->toArray());
+        $id = static::query()->insert($this->attributesForPersistence());
         $this->attributes[$this->primaryKey] = $id;
 
         return true;
